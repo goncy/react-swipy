@@ -49,8 +49,8 @@ class App extends Component {
               <Swipeable
                 buttons={({right, left}) => (
                   <div style={actionsStyles}>
-                    <Button onClick={right}>Accept</Button>
                     <Button onClick={left}>Reject</Button>
+                    <Button onClick={right}>Accept</Button>
                   </div>
                 )}
                 onAfterSwipe={this.remove}
