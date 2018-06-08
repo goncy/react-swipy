@@ -6,7 +6,10 @@ A simple Tinder-like swipeable React component
 
 ## Installation
 ```sh
+# NPM
 npm install --save react-swipy
+# Yarn
+yarn add react-swipy
 ```
 
 ## Why
