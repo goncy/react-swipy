@@ -126,7 +126,11 @@ describe("Swipeable", () => {
   describe("Cancel", () => {
     it("Should not swipe if the limit wasn't reached", done => {
       const onSwipe = jest.fn();
-      const wrapper = mount(<Swipeable limit={500} onSwipe={onSwipe} />);
+      const wrapper = mount(
+        <Swipeable limit={500} onSwipe={onSwipe}>
+          Hello
+        </Swipeable>
+      );
 
       swipe(wrapper, 250);
 
@@ -138,7 +142,7 @@ describe("Swipeable", () => {
 
     it("Should not swipe if recently swiped", done => {
       const onSwipe = jest.fn();
-      const wrapper = mount(<Swipeable onSwipe={onSwipe} />);
+      const wrapper = mount(<Swipeable onSwipe={onSwipe}>Hello</Swipeable>);
 
       swipe(wrapper, 500);
       swipe(wrapper, -500);
@@ -153,7 +157,7 @@ describe("Swipeable", () => {
   describe("Swipe", () => {
     it("Should remove a card after touch swipe", done => {
       const onSwipe = jest.fn();
-      const wrapper = mount(<Swipeable onSwipe={onSwipe} />);
+      const wrapper = mount(<Swipeable onSwipe={onSwipe}>Hello</Swipeable>);
 
       expect(getState(wrapper)).toMatchObject({
         start: 0,
@@ -212,24 +216,24 @@ describe("Swipeable", () => {
       });
 
       wrapper.simulate("mouseDown", {
-        pageX: 500,
-        pageY: 0,
-      });
-
-      expect(getState(wrapper)).toMatchObject({
-        start: 500,
-        moving: true,
-        pristine: false,
-      });
-
-      simulate(wrapper, "onDragMove", {
         pageX: 0,
         pageY: 0,
       });
 
       expect(getState(wrapper)).toMatchObject({
-        start: 500,
-        offset: getOffset(500, 0),
+        start: 0,
+        moving: true,
+        pristine: false,
+      });
+
+      simulate(wrapper, "onDragMove", {
+        pageX: 500,
+        pageY: 0,
+      });
+
+      expect(getState(wrapper)).toMatchObject({
+        start: 0,
+        offset: getOffset(0, 500),
         moving: true,
         pristine: false,
       });
@@ -238,7 +242,7 @@ describe("Swipeable", () => {
 
       setTimeout(() => {
         expect(onSwipe).toHaveBeenCalledTimes(1);
-        expect(onSwipe).toHaveBeenCalledWith("left");
+        expect(onSwipe).toHaveBeenCalledWith("right");
         done();
       }, 1000);
     });
@@ -247,7 +251,9 @@ describe("Swipeable", () => {
   describe("onAfterSwipe", () => {
     it("Should call a handler after swiping", done => {
       const onAfterSwipe = jest.fn();
-      const wrapper = mount(<Swipeable onAfterSwipe={onAfterSwipe} />);
+      const wrapper = mount(
+        <Swipeable onAfterSwipe={onAfterSwipe}>Hello</Swipeable>
+      );
 
       swipe(wrapper, 500);
 
