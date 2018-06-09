@@ -1,9 +1,21 @@
 {
   "presets": [
-    ["env", {"modules": false}],
+    ["env", { "loose": true, "modules": false }],
     "react"
   ],
   "plugins": [
-    "transform-class-properties"
-  ]
+    ["transform-class-properties", { "loose": true }]
+  ],
+  "env": {
+    "cjs": {
+      "plugins": [
+        "transform-es2015-modules-commonjs"
+      ]
+    },
+    "test": {
+      "plugins": [
+        "transform-es2015-modules-commonjs"
+      ]
+    }
+  }
 }

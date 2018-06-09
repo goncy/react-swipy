@@ -50,6 +50,7 @@
     "rollup-plugin-uglify": "^4.0.0"
   },
   "dependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-spring": "^5.3.8"
