@@ -1,13 +1,12 @@
 import React, {PureComponent, Fragment} from "react";
 import {Spring} from "react-spring";
-
-const getDirection = offset => (offset > 0 ? "right" : "left");
-const getOpacity = (offset, limit) => 1 - Math.abs(offset) / limit;
-const getOffset = (start, end) => -((start - end) * 0.75);
-const getEvent = e => (e.touches ? e.touches[0] : e);
-const withX = fn => e => fn(getEvent(e).pageX);
-const getLimitOffset = (limit, direction) =>
-  direction === "right" ? limit : -limit;
+import {
+  getDirection,
+  getOpacity,
+  getOffset,
+  withX,
+  getLimitOffset,
+} from "./helpers";
 
 const SWIPE_CONFIG = {tension: 390, friction: 30};
 
@@ -143,7 +142,7 @@ export default class Swipeable extends PureComponent {
                 opacity,
                 transform: `translateX(${offset}px) rotate(${offset / 10}deg)`,
                 height: "100%",
-                width: "100%"
+                width: "100%",
               }}
               onMouseDown={this.onDragStart}
               onTouchStart={this.onDragStart}
