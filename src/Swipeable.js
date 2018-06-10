@@ -8,20 +8,33 @@ import {
   getLimitOffset,
 } from "./helpers";
 
-const SWIPE_CONFIG = {tension: 390, friction: 30};
+const SWIPE_CONFIG = {
+  tension: 390,
+  friction: 30,
+  restSpeedThreshold: 1,
+  restDisplacementThreshold: 0.01,
+  overshootClamping: true,
+  lastVelocity: 1,
+  mass: 0.1,
+};
+
+const DEFAULT_PROPS = {
+  limit: 120,
+};
+
+const INITIAL_STATE = {
+  start: 0,
+  offset: 0,
+  forced: false,
+  swiped: false,
+  moving: false,
+  pristine: true,
+};
 
 export default class Swipeable extends PureComponent {
-  static defaultProps = {
-    limit: 120,
-  };
+  static defaultProps = DEFAULT_PROPS;
 
-  state = {
-    start: 0,
-    offset: 0,
-    swiped: false,
-    moving: false,
-    pristine: true,
-  };
+  state = INITIAL_STATE;
 
   componentDidMount() {
     window.addEventListener("touchmove", this.onDragMove);
@@ -51,12 +64,10 @@ export default class Swipeable extends PureComponent {
   );
 
   onDragEnd = () => {
-    if (this.state.swiped) return;
-
     const {offset} = this.state;
     const {limit} = this.props;
 
-    if (Math.abs(offset) > limit) {
+    if (Math.abs(offset) >= limit) {
       this.onBeforeSwipe(getDirection(offset));
     } else {
       this.onCancelSwipe();
@@ -96,13 +107,7 @@ export default class Swipeable extends PureComponent {
   onAfterSwipe = () => {
     const {onAfterSwipe} = this.props;
 
-    this.setState({
-      pristine: true,
-      swiped: false,
-      start: 0,
-      offset: 0,
-      moving: false,
-    });
+    this.setState(INITIAL_STATE);
 
     if (onAfterSwipe) {
       onAfterSwipe();
@@ -114,14 +119,17 @@ export default class Swipeable extends PureComponent {
 
     this.setState({
       pristine: false,
+      forced: true,
     });
 
     this.onBeforeSwipe(direction);
   };
 
   render() {
-    const {offset, swiped, pristine} = this.state;
+    const {offset, swiped, pristine, forced} = this.state;
     const {children, limit, buttons} = this.props;
+
+    const cancelAnimation = pristine || (!forced && Math.abs(offset) >= limit);
 
     return (
       <Fragment>
@@ -132,7 +140,7 @@ export default class Swipeable extends PureComponent {
             opacity: getOpacity(offset, limit),
           }}
           onRest={() => swiped && this.onAfterSwipe()}
-          immediate={pristine}
+          immediate={cancelAnimation}
           config={SWIPE_CONFIG}
         >
           {({offset, opacity}) => (

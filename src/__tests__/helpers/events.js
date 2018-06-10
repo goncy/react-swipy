@@ -19,3 +19,7 @@ export function swipe(wrapper, offset) {
 
   simulate(wrapper, "onDragEnd");
 }
+
+export function wait(time) {
+  return new Promise(_ => setTimeout(_, time));
+}
