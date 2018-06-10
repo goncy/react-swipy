@@ -129,8 +129,6 @@ export default class Swipeable extends PureComponent {
     const {offset, swiped, pristine, forced} = this.state;
     const {children, limit, buttons} = this.props;
 
-    const cancelAnimation = pristine || (!forced && Math.abs(offset) >= limit);
-
     return (
       <Fragment>
         <Spring
@@ -140,12 +138,11 @@ export default class Swipeable extends PureComponent {
             opacity: getOpacity(offset, limit),
           }}
           onRest={() => swiped && this.onAfterSwipe()}
-          immediate={cancelAnimation}
+          immediate={pristine || (!forced && Math.abs(offset) >= limit)}
           config={SWIPE_CONFIG}
         >
           {({offset, opacity}) => (
             <div
-              data-test="swipeable"
               style={{
                 opacity,
                 transform: `translateX(${offset}px) rotate(${offset / 10}deg)`,
