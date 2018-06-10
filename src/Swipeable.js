@@ -64,10 +64,10 @@ export default class Swipeable extends PureComponent {
   );
 
   onDragEnd = () => {
-    const {offset} = this.state;
+    const {offset, swiped, moving} = this.state;
     const {limit} = this.props;
 
-    if (Math.abs(offset) >= limit) {
+    if (!swiped && moving && Math.abs(offset) >= limit) {
       this.onBeforeSwipe(getDirection(offset));
     } else {
       this.onCancelSwipe();
