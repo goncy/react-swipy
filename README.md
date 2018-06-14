@@ -50,7 +50,7 @@ class App extends Component {
           {cards.length > 0 ? (
             <div style={wrapperStyles}>
               <Swipeable
-                buttons={({right, left}) => (
+                buttons={({left, right}) => (
                   <div style={actionsStyles}>
                     <Button onClick={left}>Reject</Button>
                     <Button onClick={right}>Accept</Button>
@@ -73,3 +73,38 @@ class App extends Component {
 
 export default App;
 ```
+
+## Props
+
+#### limit
+`Number`
+
+Offset in px swiped to consider as swipe
+
+#### onBeforeSwipe
+`Function`
+
+Callback executed before swiping, it receives 3 parameters:
+* A function that, when called, executes the swipe ('left' or 'right' can be passed to force direction)
+* A function that will cancel the swipe
+* The direction of the swipe
+
+#### onSwipe
+`Function`
+
+Callback executed right after swipe, it receives 'left' or 'right' as first parameter
+
+#### onAfterSwipe
+`Function`
+
+Callback executed when animation ends
+
+#### children
+`Node`
+
+Content of the card
+
+#### buttons
+`Function`
+
+Function that returns a `left` and `right` function that will force a swipe
