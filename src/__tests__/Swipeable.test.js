@@ -65,6 +65,16 @@ describe("Buttons", () => {
 
     expect(wrapper.find('[data-test="content"]').text()).toEqual("Fourth");
   });
+
+  it("Should have the same state after clicking twice", async () => {
+    wrapper.find('[data-test="left"]').simulate("click");
+    const first = getState(wrapper);
+
+    wrapper.find('[data-test="left"]').simulate("click");
+    const second = getState(wrapper);
+
+    expect(first).toMatchObject(second);
+  });
 });
 
 describe("onBeforeSwipe", () => {

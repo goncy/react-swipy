@@ -50,24 +50,27 @@ export default class Swipeable extends PureComponent {
     window.removeEventListener("mouseup", this.onDragEnd);
   }
 
-  onDragStart = withX(
-    start =>
-      !this.state.swiped &&
-      this.setState({start, pristine: false, moving: true})
-  );
+  onDragStart = withX(start => {
+    if (this.state.swiped) return;
 
-  onDragMove = withX(
-    end =>
-      !this.state.swiped &&
-      this.state.moving &&
-      this.setState(({start}) => ({offset: getOffset(start, end)}))
-  );
+    this.setState({start, pristine: false, moving: true});
+  });
+
+  onDragMove = withX(end => {
+    const {start, swiped, moving} = this.state;
+
+    if (swiped || !moving) return;
+
+    this.setState({offset: getOffset(start, end)});
+  });
 
   onDragEnd = () => {
     const {offset, swiped, moving} = this.state;
     const {limit} = this.props;
 
-    if (!swiped && moving && Math.abs(offset) >= limit) {
+    if (swiped || !moving) return;
+
+    if (Math.abs(offset) >= limit) {
       this.onBeforeSwipe(getDirection(offset));
     } else {
       this.onCancelSwipe();
