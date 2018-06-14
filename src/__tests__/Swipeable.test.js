@@ -139,6 +139,8 @@ describe("Double swiping", () => {
     simulate(wrapper, "forceSwipe", "left");
     const first = getState(wrapper);
 
+    await wait(100);
+
     swipe(wrapper, 250);
     const second = getState(wrapper);
 
@@ -155,9 +157,7 @@ describe("Cancel", () => {
   );
 
   it("Should not swipe if the limit wasn't reached", async () => {
-    swipe(wrapper, 250);
-
-    await wait(600);
+    swipe(wrapper, 200);
 
     expect(onSwipe).toHaveBeenCalledTimes(0);
   });
@@ -207,8 +207,6 @@ describe("Swipe", () => {
 
     simulate(wrapper, "onDragEnd");
 
-    await wait(600);
-
     expect(onSwipe).toHaveBeenCalledTimes(1);
     expect(onSwipe).toHaveBeenCalledWith("left");
   });
@@ -248,24 +246,22 @@ describe("Swipe", () => {
 
     simulate(wrapper, "onDragEnd");
 
-    await wait(600);
-
     expect(onSwipe).toHaveBeenCalledTimes(1);
     expect(onSwipe).toHaveBeenCalledWith("right");
   });
 });
 
 describe("onAfterSwipe", () => {
-  it("Should call a handler after swiping", async () => {
-    const onAfterSwipe = jest.fn();
+  it("Should call a handler after swiping", done => {
+    const onAfterSwipe = jest.fn(() => {
+      expect(onAfterSwipe).toHaveBeenCalledTimes(1);
+      done();
+    });
+
     const wrapper = mount(
       <Swipeable onAfterSwipe={onAfterSwipe}>Hello</Swipeable>
     );
 
     swipe(wrapper, 500);
-
-    await wait(600);
-
-    expect(onAfterSwipe).toHaveBeenCalledTimes(1);
   });
 });
