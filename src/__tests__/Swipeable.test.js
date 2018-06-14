@@ -65,16 +65,6 @@ describe("Buttons", () => {
 
     expect(wrapper.find('[data-test="content"]').text()).toEqual("Fourth");
   });
-
-  it("Should have the same state after clicking twice", async () => {
-    wrapper.find('[data-test="left"]').simulate("click");
-    const first = getState(wrapper);
-
-    wrapper.find('[data-test="left"]').simulate("click");
-    const second = getState(wrapper);
-
-    expect(first).toMatchObject(second);
-  });
 });
 
 describe("onBeforeSwipe", () => {
@@ -130,15 +120,41 @@ describe("onBeforeSwipe", () => {
   });
 });
 
-describe("Cancel", () => {
-  it("Should not swipe if the limit wasn't reached", async () => {
-    const onSwipe = jest.fn();
-    const wrapper = mount(
-      <Swipeable limit={500} onSwipe={onSwipe}>
-        Hello
-      </Swipeable>
-    );
+describe("Double swiping", () => {
+  const wrapper = mount(<Swipeable>Hello</Swipeable>);
 
+  it("Should have the same state after clicking twice", async () => {
+    simulate(wrapper, "forceSwipe", "left");
+    const first = getState(wrapper);
+
+    await wait(100);
+
+    simulate(wrapper, "forceSwipe", "right");
+    const second = getState(wrapper);
+
+    expect(first).toMatchObject(second);
+  });
+
+  it("Should not swipe manually as soon as the button is clicked", async () => {
+    simulate(wrapper, "forceSwipe", "left");
+    const first = getState(wrapper);
+
+    swipe(wrapper, 250);
+    const second = getState(wrapper);
+
+    expect(first).toMatchObject(second);
+  });
+});
+
+describe("Cancel", () => {
+  const onSwipe = jest.fn();
+  const wrapper = mount(
+    <Swipeable limit={500} onSwipe={onSwipe}>
+      Hello
+    </Swipeable>
+  );
+
+  it("Should not swipe if the limit wasn't reached", async () => {
     swipe(wrapper, 250);
 
     await wait(600);
