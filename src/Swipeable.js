@@ -20,6 +20,7 @@ const SWIPE_CONFIG = {
 
 const DEFAULT_PROPS = {
   limit: 120,
+  min: 40,
 };
 
 const INITIAL_STATE = {
@@ -130,7 +131,7 @@ export default class Swipeable extends PureComponent {
 
   render() {
     const {offset, swiped, pristine, forced} = this.state;
-    const {children, limit, buttons} = this.props;
+    const {children, limit, buttons, min} = this.props;
 
     return (
       <Fragment>
@@ -138,7 +139,7 @@ export default class Swipeable extends PureComponent {
           from={{offset: 0, opacity: 1}}
           to={{
             offset,
-            opacity: getOpacity(offset, limit),
+            opacity: getOpacity(offset, limit, min),
           }}
           onRest={() => swiped && this.onAfterSwipe()}
           immediate={pristine || (!forced && Math.abs(offset) >= limit)}

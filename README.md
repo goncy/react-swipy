@@ -81,6 +81,11 @@ export default App;
 
 Offset in px swiped to consider as swipe
 
+#### min
+`Number`
+
+Offset when opacity fade should start
+
 #### onBeforeSwipe
 `Function`
 
