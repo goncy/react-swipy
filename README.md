@@ -4,7 +4,7 @@
 
 A simple Tinder-like swipeable React component
 
-## This library is not being mantained anymore
+## 🚨 This library is not being mantained anymore 🚨
 But [@pedro-lb](https://github.com/pedro-lb) ported this to Typescript and is being mantained [here](https://github.com/pedro-lb/react-deck-swiper)
 
 ## Installation
